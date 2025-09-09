@@ -1,0 +1,6 @@
+<div class="user-info">
+    @if (user()?.games && user()?.username) {
+    {{ user()?.username }}
+    {{ user()?.games }}
+    }
+</div>

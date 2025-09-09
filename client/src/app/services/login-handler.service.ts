@@ -1,7 +1,6 @@
 import { Router } from '@angular/router';
 import { ErrorHandler } from './errors.service';
 import { HttpHandler } from './http-handler.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
@@ -14,12 +13,11 @@ export class LoginHandler {
     constructor(
         private httpHandler: HttpHandler,
         private errorHandler: ErrorHandler,
-        private router: Router,
-        private snackBar: MatSnackBar
+        private router: Router
     ) {}
 
     public loginUser(email: string, password: string) {
-        const response = this.httpHandler
+        this.httpHandler
             .postLoginRequest(email, password)
             .pipe(
                 catchError((err: HttpErrorResponse) => {
@@ -35,8 +33,7 @@ export class LoginHandler {
                 if (usr == null) {
                     this.errorHandler.showError('An error has occured.');
                 } else {
-                    // redirect to user once that component is made
-                    this.router.navigate(['/']);
+                    this.router.navigate([`/user/${usr.id}`]);
                 }
             });
     }
