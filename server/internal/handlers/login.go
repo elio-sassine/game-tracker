@@ -34,5 +34,5 @@ func loginUser(c *gin.Context) {
 
 	user.SetTokens(c, email, id)
 
-	c.IndentedJSON(http.StatusOK, nil)
+	c.IndentedJSON(http.StatusOK, id)
 }

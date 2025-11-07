@@ -5,9 +5,12 @@ services:
     depends_on:
       database:
         condition: service_healthy
-
     ports:
       - 8080:8080
+      - 8443:8443
+    restart: unless-stopped
+    volumes:
+      - ./certs:/certs:ro
     develop:
       watch:
         - action: rebuild
@@ -21,11 +24,10 @@ services:
       - server
     ports:
       - 4200:80
-    develop:
-      watch:
-        - action: rebuild
-          path: ./client
-          target: /usr/src/app
+      - 4443:443
+    restart: unless-stopped
+    volumes:
+      - ./certs:/certs:ro
 
   database:
     container_name: mongo

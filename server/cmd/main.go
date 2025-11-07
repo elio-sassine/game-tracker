@@ -20,7 +20,6 @@ func main() {
 	}
 
 	server_ip := os.Getenv("SERVER_IP")
-	server_port := os.Getenv("SERVER_PORT")
 
 	// Set up the API
 	igdb.Setup()
@@ -42,5 +41,33 @@ func main() {
 	// Set up the routes
 	handlers.Setup(router)
 
-	router.Run(server_ip + ":" + server_port)
+	// Look for certs in common locations (repo path for local runs, /certs for container mounts)
+	localCert := "../certs/localhost.pem"
+	localKey := "../certs/localhost-key.pem"
+	containerCert := "/certs/localhost.pem"
+	containerKey := "/certs/localhost-key.pem"
+
+	certFile := ""
+	keyFile := ""
+	if _, err := os.Stat(localCert); err == nil {
+		certFile = localCert
+		keyFile = localKey
+	} else if _, err := os.Stat(containerCert); err == nil {
+		certFile = containerCert
+		keyFile = containerKey
+	}
+
+	if certFile != "" && keyFile != "" {
+		addr := server_ip + ":8443"
+		log.Printf("Starting server with TLS on %s", addr)
+		if err := router.RunTLS(addr, certFile, keyFile); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		addr := server_ip + ":8080"
+		log.Printf("Starting server without TLS on %s", addr)
+		if err := router.Run(addr); err != nil {
+			log.Fatal(err)
+		}
+	}
 }

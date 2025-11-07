@@ -1,0 +1,16 @@
+# Local certs for mkcert or dev
+certs/
+
+# Node
+client/node_modules/
+client/dist/
+
+# Go build
+server/bin/
+server/server
+
+# Editor/temp files
+*.swp
+*.swo
+.vscode/
+.DS_Store

@@ -2,8 +2,9 @@ package user
 
 import (
 	"log"
-	"net/url"
+	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/bwmarrin/snowflake"
@@ -27,10 +28,38 @@ func SetTokens(c *gin.Context, email string, id snowflake.ID) {
 	verifTkn := generateToken(email, id, 60*time.Minute, false)
 	refreshTkn := generateToken(email, id, 60*time.Hour, true)
 
-	domain := getDomain(c)
+	// Prefer host-only cookies for localhost/dev (omit Domain)
+	// Determine if the request is secure (TLS) or origin uses https
+	origin := c.Request.Header.Get("Origin")
+	secure := c.Request.TLS != nil || strings.HasPrefix(strings.ToLower(origin), "https://")
 
-	c.SetCookie("JWT_TOKEN", verifTkn, int(60*time.Minute), "/", domain, true, true)
-	c.SetCookie("JWT_REFRESH", refreshTkn, int(60*time.Hour), "/", domain, true, true)
+	verifMaxAge := int((60 * time.Minute).Seconds())
+	refreshMaxAge := int((60 * time.Hour).Seconds())
+
+	ss := http.SameSiteLaxMode
+	if secure {
+		ss = http.SameSiteNoneMode
+	}
+
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "JWT_TOKEN",
+		Value:    verifTkn,
+		Path:     "/",
+		MaxAge:   verifMaxAge,
+		HttpOnly: true,
+		Secure:   secure,
+		SameSite: ss,
+	})
+
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "JWT_REFRESH",
+		Value:    refreshTkn,
+		Path:     "/",
+		MaxAge:   refreshMaxAge,
+		HttpOnly: true,
+		Secure:   secure,
+		SameSite: ss,
+	})
 }
 
 func generateToken(email string, id snowflake.ID, expiryTime time.Duration, isRefreshToken bool) string {
@@ -57,15 +86,6 @@ func generateToken(email string, id snowflake.ID, expiryTime time.Duration, isRe
 	}
 
 	return token
-}
-
-func getDomain(c *gin.Context) string {
-	parsedUrl, err := url.Parse(c.Request.Header.Get("Origin"))
-	if err != nil {
-		log.Panic(err)
-	}
-
-	return parsedUrl.Hostname()
 }
 
 func checkPassword(password string, encryptedPassword string) bool {

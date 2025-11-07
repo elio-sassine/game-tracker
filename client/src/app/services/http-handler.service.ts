@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Game } from '../interfaces/game';
 import { User } from '../interfaces/user';
@@ -8,9 +8,9 @@ import { User } from '../interfaces/user';
     providedIn: 'root',
 })
 export class HttpHandler {
-    constructor(private http: HttpClient) {}
+    constructor(@Inject(HttpClient) private http: HttpClient) {}
 
-    baseUrl = 'http://localhost:8080';
+    baseUrl = 'https://localhost:8443';
     jwtKey = null;
 
     getGamesRequest(name: string): Observable<Game[]> {
@@ -29,14 +29,23 @@ export class HttpHandler {
         });
     }
 
-    postLoginRequest(email: string, password: string): Observable<User | null> {
-        return this.http.post<User | null>(`${this.baseUrl}/login`, {
-            email: email,
-            password: password,
-        });
+    postLoginRequest(
+        email: string,
+        password: string
+    ): Observable<number | null> {
+        return this.http.post<number | null>(
+            `${this.baseUrl}/login`,
+            {
+                email: email,
+                password: password,
+            },
+            { withCredentials: true }
+        );
     }
 
     getUserRequest(id: number): Observable<User | null> {
-        return this.http.get<User | null>(`${this.baseUrl}/user?id=${id}`);
+        return this.http.get<User | null>(`${this.baseUrl}/user?id=${id}`, {
+            withCredentials: true,
+        });
     }
 }
