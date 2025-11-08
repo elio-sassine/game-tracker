@@ -29,10 +29,11 @@ export class LoginHandler {
                     throw err;
                 })
             )
-            .subscribe((id: number | null) => {
+            .subscribe((id: string | null) => {
                 if (id == null) {
                     this.errorHandler.showError('No ID!');
                 } else {
+                    console.log('User logged in: ', id);
                     this.router.navigate([`/user/${id}`]);
                 }
             });

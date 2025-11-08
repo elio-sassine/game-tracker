@@ -10,7 +10,7 @@ import { HttpHandler } from '../../services/http-handler.service';
     imports: [],
 })
 export class UserPage implements OnInit {
-    userId!: number;
+    userId!: string;
     user!: User;
     constructor(
         private routes: ActivatedRoute,
@@ -18,7 +18,7 @@ export class UserPage implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.userId = Number(this.routes.snapshot.paramMap.get('id'));
+        this.userId = this.routes.snapshot.paramMap.get('id') as string;
         this.httpHandler
             .getUserRequest(this.userId)
             .subscribe((usr: User | null) => {

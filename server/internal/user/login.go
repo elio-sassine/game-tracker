@@ -26,10 +26,8 @@ func CheckUser(email string, password string) bool {
 
 func SetTokens(c *gin.Context, email string, id snowflake.ID) {
 	verifTkn := generateToken(email, id, 60*time.Minute, false)
-	refreshTkn := generateToken(email, id, 60*time.Hour, true)
+	refreshTkn := generateToken(email, id, 3*24*time.Hour, true)
 
-	// Prefer host-only cookies for localhost/dev (omit Domain)
-	// Determine if the request is secure (TLS) or origin uses https
 	origin := c.Request.Header.Get("Origin")
 	secure := c.Request.TLS != nil || strings.HasPrefix(strings.ToLower(origin), "https://")
 
@@ -60,6 +58,7 @@ func SetTokens(c *gin.Context, email string, id snowflake.ID) {
 		Secure:   secure,
 		SameSite: ss,
 	})
+
 }
 
 func generateToken(email string, id snowflake.ID, expiryTime time.Duration, isRefreshToken bool) string {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/user"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 func setupLogin(router *gin.Engine) {
@@ -29,10 +30,20 @@ func loginUser(c *gin.Context) {
 		return
 	}
 
-	userFetch, _ := user.GetUserByEmail(email)
+	userFetch, err := user.GetUserByEmail(email)
+	if err == mongo.ErrNoDocuments {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	} else if err != nil {
+		log.Panic(err)
+	}
+
+	println(userFetch.Id)
+
 	id := userFetch.Id
 
 	user.SetTokens(c, email, id)
 
-	c.IndentedJSON(http.StatusOK, id)
+	println("User logged in: ", id)
+	c.IndentedJSON(http.StatusOK, id.String())
 }

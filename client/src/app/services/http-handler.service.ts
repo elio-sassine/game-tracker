@@ -32,8 +32,9 @@ export class HttpHandler {
     postLoginRequest(
         email: string,
         password: string
-    ): Observable<number | null> {
-        return this.http.post<number | null>(
+    ): Observable<string | null> {
+        // Return the user ID as a string to preserve full 64-bit snowflake IDs
+        return this.http.post<string | null>(
             `${this.baseUrl}/login`,
             {
                 email: email,
@@ -43,7 +44,8 @@ export class HttpHandler {
         );
     }
 
-    getUserRequest(id: number): Observable<User | null> {
+    getUserRequest(id: string): Observable<User | null> {
+        // id passed as string to avoid precision loss in JavaScript numbers
         return this.http.get<User | null>(`${this.baseUrl}/user?id=${id}`, {
             withCredentials: true,
         });

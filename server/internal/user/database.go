@@ -3,19 +3,47 @@ package user
 import (
 	"context"
 	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
-var coll *mongo.Collection
+var userCollection *mongo.Collection
+var refreshTokenColl *mongo.Collection
+
+type RefreshTokenDoc struct {
+	Token     string    `bson:"token"`
+	ExpireAt  time.Time `bson:"expireAt"` // must be time.Time for TTL index
+	CreatedAt time.Time `bson:"createdAt"`
+}
 
 func Setup(client *mongo.Client) {
-	coll = client.Database("test").Collection("users")
+	userCollection = client.Database("test").Collection("users")
+	refreshTokenColl = client.Database("test").Collection("refresh_tokens")
+}
+
+func InsertRefreshToken(token *string) (*string, error) {
+	hashedTokenString, err := bcrypt.GenerateFromPassword([]byte(*token), bcrypt.DefaultCost)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	_, err = refreshTokenColl.InsertOne(
+		context.Background(),
+		&RefreshTokenDoc{
+			Token:     string(hashedTokenString),
+			ExpireAt:  time.Now().Add(3 * 24 * time.Hour), // set expiration time
+			CreatedAt: time.Now(),
+		},
+	)
+
+	return token, err
 }
 
 func InsertUser(user *User) (*User, error) {
-	_, err := coll.InsertOne(context.Background(), user)
+	_, err := userCollection.InsertOne(context.Background(), user)
 	return user, err
 }
 
@@ -35,7 +63,7 @@ func UserExists(email string) bool {
 	return user != nil
 }
 
-func GetUserByID(id int) (*User, error) {
+func GetUserByID(id int64) (*User, error) {
 	filter := bson.D{{Key: "_id", Value: id}}
 
 	var result User
@@ -45,7 +73,7 @@ func GetUserByID(id int) (*User, error) {
 }
 
 func getUserWithFilter(filter bson.D, result *User) (*User, error) {
-	err := coll.FindOne(context.Background(), filter).Decode(&result)
+	err := userCollection.FindOne(context.Background(), filter).Decode(&result)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
@@ -57,5 +85,6 @@ func getUserWithFilter(filter bson.D, result *User) (*User, error) {
 	}
 
 	println("documents found")
+	println(result.Id)
 	return result, nil
 }

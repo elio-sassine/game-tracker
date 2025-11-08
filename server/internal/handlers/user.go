@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/user"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 func setupUser(router *gin.Engine) {
@@ -19,9 +20,12 @@ func getUser(c *gin.Context) {
 		log.Panic(err)
 	}
 
-	userReq, err := user.GetUserByID(int(id))
+	userReq, err := user.GetUserByID(id)
 
-	if err != nil {
+	if err == mongo.ErrNoDocuments {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	} else if err != nil {
 		log.Panic(err)
 	}
 

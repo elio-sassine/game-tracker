@@ -14,7 +14,8 @@ import (
 )
 
 var Client *mongo.Client
-var coll *mongo.Collection
+var userColl *mongo.Collection
+var refreshTokenColl *mongo.Collection
 
 func Setup() {
 	url := os.Getenv("DATABASE_URL")
@@ -31,15 +32,17 @@ func Setup() {
 		log.Panic(err)
 	}
 
-	coll = Client.Database("test").Collection("users")
+	userColl = Client.Database("test").Collection("users")
+
+	refreshTokenColl = Client.Database("test").Collection("refresh_tokens")
 
 	user.Setup(Client)
 
 	// Will throw an error if the definitions of the index models change
-	createIndex()
+	createIndexes()
 }
 
-func createIndex() {
+func createIndexes() {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
@@ -48,9 +51,21 @@ func createIndex() {
 		Options: options.Index().SetUnique(true),
 	}
 
-	_, err := coll.Indexes().CreateOne(ctx, indexModel)
+	_, err := userColl.Indexes().CreateOne(ctx, indexModel)
 
 	if err != nil {
 		log.Panic(err)
 	}
+
+	ttlIndex := mongo.IndexModel{
+		Keys:    bson.D{{Key: "expireAt", Value: 1}},
+		Options: options.Index().SetName("expire_at_ttl").SetExpireAfterSeconds(0),
+	}
+
+	_, err = refreshTokenColl.Indexes().CreateOne(ctx, ttlIndex)
+
+	if err != nil {
+		log.Panic(err)
+	}
+
 }
