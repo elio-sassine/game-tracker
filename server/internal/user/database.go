@@ -42,6 +42,15 @@ func InsertRefreshToken(token *string) (*string, error) {
 	return token, err
 }
 
+func GetRefreshToken(token string) (*string, error) {
+	filter := bson.D{{Key: "token", Value: token}}
+
+	var result RefreshTokenDoc
+	refreshToken, err := getRefreshTokenWithFilter(filter, &result)
+
+	return refreshToken, err
+}
+
 func InsertUser(user *User) (*User, error) {
 	_, err := userCollection.InsertOne(context.Background(), user)
 	return user, err
@@ -87,4 +96,20 @@ func getUserWithFilter(filter bson.D, result *User) (*User, error) {
 	println("documents found")
 	println(result.Id)
 	return result, nil
+}
+
+func getRefreshTokenWithFilter(filter bson.D, result *RefreshTokenDoc) (*string, error) {
+	err := refreshTokenColl.FindOne(context.Background(), filter).Decode(&result)
+
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			println("Error no documents found")
+			return nil, err
+		}
+
+		log.Panic(err)
+	}
+	println("documents found")
+	println(result.Token)
+	return &result.Token, nil
 }
