@@ -1,4 +1,4 @@
-package handlers
+package authentication
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/user"
 )
 
-func setupRegistration(router *gin.Engine) {
+func SetupRegistration(router *gin.Engine) {
 	router.POST("/register", registerUser)
 }
 

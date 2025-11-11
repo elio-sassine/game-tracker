@@ -1,4 +1,4 @@
-package handlers
+package authentication
 
 import (
 	"log"
@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-func setupLogin(router *gin.Engine) {
+func SetupLogin(router *gin.Engine) {
 	router.POST("/login", loginUser)
 }
 

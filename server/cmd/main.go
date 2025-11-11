@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/database"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/handlers"
+	"github.com/phoenix-of-dawn/game-tracker/server/internal/handlers/middleware"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/igdb"
 )
 
@@ -35,7 +36,7 @@ func main() {
 
 	// Make router
 	router := gin.Default()
-	router.Use(handlers.CORSMiddleware())
+	router.Use(middleware.CORSMiddleware())
 	router.SetTrustedProxies(nil)
 
 	// Set up the routes
