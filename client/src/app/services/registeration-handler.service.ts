@@ -24,7 +24,7 @@ export class RegistrationHandler {
         response
             .pipe(
                 catchError((err: HttpErrorResponse) => {
-                    if (err.status == HttpStatusCode.Unauthorized) {
+                    if (err.status == HttpStatusCode.Conflict) {
                         this.errorHandler.showError(
                             'An account with this email already exists'
                         );
