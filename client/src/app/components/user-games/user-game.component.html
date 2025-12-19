@@ -1,0 +1,12 @@
+<div class="user-games">
+    @if (user() != null && (user()?.games?.length ?? 0) > 0) {
+    <h2>Your Games</h2>
+    <ul>
+        @for (game of user()?.games ?? []; track game) {
+        <li>{{ game }}</li>
+        }
+    </ul>
+    } @else {
+    <p>You have no games tracked!</p>
+    }
+</div>

@@ -1,0 +1,8 @@
+<div class="user">
+    @if (user != undefined && user != null) {
+    <user-info [userInput]="user"></user-info>
+    <user-game [userInput]="user"></user-game>
+    } @else {
+    <h1>User not found!</h1>
+    }
+</div>

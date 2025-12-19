@@ -1,6 +1,5 @@
 <div class="user-info">
-    @if (user()?.games && user()?.username) {
+    @if (user() != undefined && user()?.games && user()?.username) {
     {{ user()?.username }}
-    {{ user()?.games }}
     }
 </div>

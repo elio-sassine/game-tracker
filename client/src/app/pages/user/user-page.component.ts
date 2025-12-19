@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../interfaces/user';
 import { HttpHandler } from '../../services/http-handler.service';
+import { UserGame } from '../../components/user-games/user-game.component';
+import { UserInfo } from '../../components/user-info/user-info.component';
 
 @Component({
     selector: 'user-page',
     templateUrl: 'user-page.component.html',
     styleUrl: 'user-page.component.scss',
-    imports: [],
+    imports: [UserGame, UserInfo],
 })
 export class UserPage implements OnInit {
     userId!: string;
