@@ -37,6 +37,7 @@ func main() {
 	// Make router
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware())
+	router.Use(middleware.AuthOptional())
 	router.SetTrustedProxies(nil)
 
 	// Set up the routes
