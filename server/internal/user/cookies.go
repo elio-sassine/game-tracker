@@ -64,7 +64,7 @@ func ValidateCookie(cookie *http.Cookie, isRefreshToken bool) (*Claims, error) {
 		return nil, err
 	}
 
-	id, err := snowflake.ParseString(claims.ID)
+	id, err := snowflake.ParseString(claims.Subject)
 	if err != nil {
 		println("Err parsing id: " + err.Error() + " for token: " + claims.ID)
 		return nil, err

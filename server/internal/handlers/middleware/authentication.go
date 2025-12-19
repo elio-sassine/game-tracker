@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/bwmarrin/snowflake"
 	"github.com/gin-gonic/gin"
@@ -53,15 +54,16 @@ func AuthOptional() gin.HandlerFunc {
 			return
 		}
 
-		if claims.Subject == "" {
+		sub := strings.TrimSpace(claims.Subject)
+		if sub == "" {
 			c.Next()
 			return
 		}
 
-		if id, err := strconv.ParseInt(claims.Subject, 10, 64); err != nil {
+		if id, err := snowflake.ParseString(sub); err != nil {
 			c.Next()
 		} else {
-			c.Set(ctxUserIDKey, snowflake.ID(id))
+			c.Set(ctxUserIDKey, id)
 			c.Next()
 		}
 	}
