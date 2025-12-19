@@ -30,13 +30,13 @@
                     type="password"
                     formControlName="password"
                     placeholder="Must be at least 6 characters"
-                    autocomplete="new-password"
+                    autocomplete="current-password"
                     required="true"
                 />
             </mat-form-field>
         </div>
         <button mat-flat-button type="submit" [disabled]="!loginForm.valid">
-            Register
+            Login
         </button>
     </form>
 </div>
