@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -21,9 +20,7 @@ func getGames(c *gin.Context) {
 		c.String(http.StatusBadRequest, "No name provided")
 	}
 
-	cookie, _ := c.Request.Cookie("JWT_TOKEN")
-	log.Println("JWT Token Cookie:", cookie)
-	games := igdb.GetGames(name)
+	games := igdb.GetGamesByName(name)
 
 	c.JSON(http.StatusOK, &games)
 }

@@ -9,13 +9,13 @@ type UntrackGamesRequest struct {
 }
 
 type Game struct {
-	Id               int     `json:"id"`
-	Name             string  `json:"name"`
-	Cover            Cover   `json:"cover"`
-	AggregatedRating float64 `json:"aggregated_rating"`
+	Id               int     `json:"id" bson:"_id"`
+	Name             string  `json:"name" bson:"name"`
+	Cover            Cover   `json:"cover" bson:"cover"`
+	AggregatedRating float64 `json:"aggregated_rating" bson:"aggregated_rating"`
 }
 
 type Cover struct {
-	Id  int    `json:"id"`
-	Url string `json:"url"`
+	Id  int    `json:"id" bson:"_id"`
+	Url string `json:"url" bson:"url"`
 }

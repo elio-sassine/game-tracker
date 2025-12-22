@@ -7,15 +7,25 @@ import (
 	"io"
 	"log"
 	"net/http"
-
-	"github.com/phoenix-of-dawn/game-tracker/server/internal/game"
 )
 
-type Games []game.Game
+type Game struct {
+	Id               int     `json:"id"`
+	Name             string  `json:"name"`
+	Cover            Cover   `json:"cover"`
+	AggregatedRating float64 `json:"aggregated_rating"`
+}
+
+type Cover struct {
+	Id  int    `json:"id"`
+	Url string `json:"url"`
+}
+
+type Games []Game
 
 var client *http.Client = &http.Client{}
 
-func GetGame(id int) game.Game {
+func GetGame(id int) Game {
 	url := "https://api.igdb.com/v4/games"
 
 	body := bytes.NewReader([]byte(fmt.Sprintf("fields id,name,aggregated_rating,cover.url; where id=%d;", id)))
@@ -36,7 +46,41 @@ func GetGame(id int) game.Game {
 	return result[0]
 }
 
-func GetGames(name string) Games {
+func GetGamesByIds(ids []int) Games {
+	url := "https://api.igdb.com/v4/games"
+
+	idsString := ""
+	for i, id := range ids {
+		if i != 0 {
+			idsString += ","
+		}
+		idsString += fmt.Sprintf("%d", id)
+	}
+
+	bodyString := fmt.Sprintf(`
+		fields id,name,aggregated_rating,cover.url;
+		where id = (%s);
+		`,
+		idsString,
+	)
+
+	body := bytes.NewReader([]byte(bodyString))
+	resp, err := newRequest(url, body)
+	if err != nil {
+		log.Fatalf("Something went wrong with the request: %s", err.Error())
+	}
+
+	defer resp.Body.Close()
+
+	result := Games{}
+
+	byte_resp, _ := io.ReadAll(resp.Body)
+	json.Unmarshal(byte_resp, &result)
+
+	return result
+}
+
+func GetGamesByName(name string) Games {
 	url := "https://api.igdb.com/v4/games"
 
 	// game_type = 0 makes sure that only games are shown (0 is the reference ID for "main_games")
