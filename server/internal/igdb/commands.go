@@ -7,25 +7,15 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/phoenix-of-dawn/game-tracker/server/internal/game"
 )
 
-type Game struct {
-	Id               int     `json:"id"`
-	Name             string  `json:"name"`
-	AggregatedRating float64 `json:"aggregated_rating"`
-	Cover            Cover   `json:"cover"`
-}
-
-type Cover struct {
-	Id  int    `json:"id"`
-	Url string `json:"url"`
-}
-
-type Games []Game
+type Games []game.Game
 
 var client *http.Client = &http.Client{}
 
-func GetGame(id int) Game {
+func GetGame(id int) game.Game {
 	url := "https://api.igdb.com/v4/games"
 
 	body := bytes.NewReader([]byte(fmt.Sprintf("fields id,name,aggregated_rating,cover.url; where id=%d;", id)))

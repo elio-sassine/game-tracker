@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/bwmarrin/snowflake"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/phoenix-of-dawn/game-tracker/server/internal/game"
 )
 
 type User struct {
@@ -10,13 +11,13 @@ type User struct {
 	Username string       `json:"username" bson:"username"`
 	Password string       `json:"password" bson:"password"`
 	Email    string       `json:"email" bson:"email"`
-	Games    []string     `json:"games" bson:"games"`
+	Games    []game.Game  `json:"games" bson:"games"`
 }
 
 type UserRequest struct {
 	Id       snowflake.ID `json:"_id" bson:"_id"`
 	Username string       `json:"username" bson:"username"`
-	Games    []string     `json:"games" bson:"games"`
+	Games    []game.Game  `json:"games" bson:"games"`
 }
 
 type UserRegisterRequest struct {

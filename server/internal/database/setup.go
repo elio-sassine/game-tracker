@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/phoenix-of-dawn/game-tracker/server/internal/game"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/user"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -37,6 +38,8 @@ func Setup() {
 	refreshTokenColl = Client.Database("test").Collection("refresh_tokens")
 
 	user.Setup(Client)
+
+	game.Setup(Client)
 
 	// Will throw an error if the definitions of the index models change
 	createIndexes()
