@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/handlers/authentication"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/handlers/cookies"
+	gameTracking "github.com/phoenix-of-dawn/game-tracker/server/internal/handlers/game-tracking"
 )
 
 func Setup(router *gin.Engine) {
@@ -12,4 +13,5 @@ func Setup(router *gin.Engine) {
 	authentication.SetupRegistration(router)
 	authentication.SetupLogin(router)
 	cookies.SetupCookies(router)
+	gameTracking.SetupGameTrackingHandlers(router)
 }
