@@ -42,7 +42,35 @@ func trackGameHandler(c *gin.Context) {
 }
 
 func untrackGameHandler(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	request := &game.TrackGamesRequest{}
+	if !exists {
+		c.AbortWithStatus(401)
+		return
+	}
+
+	if err := c.BindJSON(request); err != nil {
+		c.AbortWithStatus(400)
+		return
+	}
+
+	gameId, err := strconv.ParseInt(request.Game, 64, 64)
+	if err != nil {
+		c.AbortWithStatus(400)
+		return
+	}
+
+	game.UntrackGame(userID.(string), int(gameId))
 }
 
 func getTrackedGamesHandler(c *gin.Context) {
+	userID, exists := c.Get("userID")
+
+	if !exists {
+		c.AbortWithStatus(401)
+		return
+	}
+
+	trackedGames := game.GetTrackedGames(userID.(string))
+	c.IndentedJSON(200, trackedGames)
 }
