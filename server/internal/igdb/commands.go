@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 )
 
 type Game struct {
@@ -105,6 +106,38 @@ func GetGamesByName(name string) Games {
 
 	byte_resp, _ := io.ReadAll(resp.Body)
 
+	json.Unmarshal(byte_resp, &result)
+
+	return result
+}
+
+func GetGamesByNames(names []string) Games {
+	// This function can be implemented similarly to GetGamesByIds
+	gameUrl := "https://api.igdb.com/v4/games"
+
+	escapedNames := make([]string, len(names))
+	for i, name := range names {
+		escapedNames[i] = fmt.Sprintf(`"%s"`, url.QueryEscape(name))
+	}
+
+	bodyString := fmt.Sprintf(`
+		fields id,name,aggregated_rating,cover.url; 
+		where name = (%s);
+		`,
+		bytes.NewBufferString(fmt.Sprint(escapedNames)).String(),
+	)
+	body := bytes.NewReader([]byte(bodyString))
+
+	resp, err := newRequest(gameUrl, body)
+	if err != nil {
+		log.Fatalf("Something went wrong with the request: %s", err.Error())
+	}
+
+	defer resp.Body.Close()
+
+	result := Games{}
+
+	byte_resp, _ := io.ReadAll(resp.Body)
 	json.Unmarshal(byte_resp, &result)
 
 	return result
