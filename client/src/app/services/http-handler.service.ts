@@ -50,4 +50,20 @@ export class HttpHandler {
             withCredentials: true,
         });
     }
+
+    postTrackRequest(gameId: number): Observable<unknown> {
+        return this.http.post(
+            `${this.baseUrl}/gameTracking/track`,
+            { game: gameId.toString() },
+            { withCredentials: true }
+        );
+    }
+
+    postUntrackRequest(gameId: number): Observable<unknown> {
+        return this.http.post(
+            `${this.baseUrl}/gameTracking/untrack`,
+            { game: gameId.toString() },
+            { withCredentials: true }
+        );
+    }
 }

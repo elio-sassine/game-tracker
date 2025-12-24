@@ -7,4 +7,7 @@
     <mat-card-content>
         Rating: {{ game()?.aggregated_rating?.toFixed(0) }}
     </mat-card-content>
+    <mat-card-actions>
+        <game-track-button [game]="game()"></game-track-button>
+    </mat-card-actions>
 </mat-card>
