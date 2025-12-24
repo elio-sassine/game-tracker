@@ -1,8 +1,10 @@
 package gameTracking
 
 import (
+	"log"
 	"strconv"
 
+	"github.com/bwmarrin/snowflake"
 	"github.com/gin-gonic/gin"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/game"
 	"github.com/phoenix-of-dawn/game-tracker/server/internal/handlers/middleware"
@@ -27,14 +29,25 @@ func trackGameHandler(c *gin.Context) {
 		return
 	}
 
-	if err := c.BindJSON(request); err != nil {
-		c.AbortWithStatus(400)
+	switch v := userID.(type) {
+	case snowflake.ID:
+		userID = v.String()
+	default:
+		c.AbortWithStatusJSON(400, gin.H{"error": "User ID invalid, sign in again"})
+		log.Panic("User ID invalid")
 		return
 	}
 
-	gameId, err := strconv.ParseInt(request.Game, 64, 64)
+	if err := c.BindJSON(request); err != nil {
+		c.AbortWithStatusJSON(400, gin.H{"error": "Failed to bind JSON: " + err.Error()})
+		log.Panic("Failed to bind JSON: ", err)
+		return
+	}
+
+	gameId, err := strconv.ParseInt(request.Game, 10, 32)
 	if err != nil {
-		c.AbortWithStatus(400)
+		c.AbortWithStatusJSON(400, gin.H{"error": "Failed to parse game ID: " + err.Error()})
+		log.Panic("Failed to parse game ID: ", err)
 		return
 	}
 
@@ -44,19 +57,31 @@ func trackGameHandler(c *gin.Context) {
 func untrackGameHandler(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	request := &game.TrackGamesRequest{}
+
+	switch v := userID.(type) {
+	case snowflake.ID:
+		userID = v.String()
+	default:
+		c.AbortWithStatusJSON(400, gin.H{"error": "User ID invalid, sign in again"})
+		log.Panic("User ID invalid")
+		return
+	}
+
 	if !exists {
 		c.AbortWithStatus(401)
 		return
 	}
 
 	if err := c.BindJSON(request); err != nil {
-		c.AbortWithStatus(400)
+		c.AbortWithStatusJSON(400, gin.H{"error": "Failed to bind JSON: " + err.Error()})
+		log.Panic("Failed to bind JSON: ", err)
 		return
 	}
 
-	gameId, err := strconv.ParseInt(request.Game, 64, 64)
+	gameId, err := strconv.ParseInt(request.Game, 10, 32)
 	if err != nil {
-		c.AbortWithStatus(400)
+		c.AbortWithStatusJSON(400, gin.H{"error": "Failed to parse game ID: " + err.Error()})
+		log.Panic("Failed to parse game ID: ", err)
 		return
 	}
 
