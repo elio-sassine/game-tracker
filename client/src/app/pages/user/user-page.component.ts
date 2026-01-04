@@ -4,6 +4,7 @@ import { User } from '../../interfaces/user';
 import { HttpHandler } from '../../services/http-handler.service';
 import { UserGameComponent } from '../../components/user-games/user-game.component';
 import { UserInfoComponent } from '../../components/user-info/user-info.component';
+import { catchError } from 'rxjs';
 
 @Component({
     selector: 'app-user-page',
@@ -26,6 +27,12 @@ export class UserPageComponent implements OnInit {
         this.userId = this.routes.snapshot.paramMap.get('id') as string;
         this.httpHandler
             .getUserRequest(this.userId)
+            .pipe(
+                catchError(() => {
+                    this.loading = false;
+                    return [null];
+                })
+            )
             .subscribe((usr: User | null) => {
                 if (usr) {
                     this.user = usr;

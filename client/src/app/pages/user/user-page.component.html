@@ -2,6 +2,8 @@
     @if (user !== undefined && user !== null) {
     <app-user-info [userInput]="user"></app-user-info>
     <app-user-game [userInput]="user"></app-user-game>
+    } @else if (loadingState() === true) {
+    <p>Loading user data...</p>
     } @else {
     <h1>User not found!</h1>
     }
