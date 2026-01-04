@@ -4,7 +4,6 @@ import { HttpHandler } from './http-handler.service';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { User } from '../interfaces/user';
 
 @Injectable({
     providedIn: 'root',
@@ -33,7 +32,6 @@ export class LoginHandler {
                 if (id == null) {
                     this.errorHandler.showError('No ID!');
                 } else {
-                    console.log('User logged in: ', id);
                     this.router.navigate([`/user/${id}`]);
                 }
             });

@@ -13,7 +13,7 @@
                     required="true"
                 />
 
-                @if (email != null && (email.dirty || email.touched)) { @if
+                @if (email !== null && (email.dirty || email.touched)) { @if
                 (email.hasError('email') && !email.hasError('required')) {
                 <mat-error>Email is <strong>required</strong></mat-error>
                 } @else if (email.hasError('required')) {

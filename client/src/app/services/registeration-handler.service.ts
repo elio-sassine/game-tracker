@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ErrorHandler } from './errors.service';
 import { HttpHandler } from './http-handler.service';
-import { catchError, Observable, Subject } from 'rxjs';
+import { catchError } from 'rxjs';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';

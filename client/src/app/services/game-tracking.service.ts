@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHandler } from './http-handler.service';
 import { User } from '../interfaces/user';
-import { Game } from '../interfaces/game';
 
 @Injectable({
     providedIn: 'root',

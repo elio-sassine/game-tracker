@@ -1,5 +1,5 @@
 <mat-card appearance="raised" class="game">
-    @if (game()?.cover && game()?.cover != undefined && game()?.cover?.url !=
+    @if (game()?.cover && game()?.cover !== undefined && game()?.cover?.url !==
     undefined) {
     <img mat-card-avatar [src]="game()?.cover?.url" [alt]="game()?.name" />
     }
