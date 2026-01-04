@@ -47,7 +47,7 @@ func GetGame(id int) Game {
 	return result[0]
 }
 
-func GetGamesByIds(ids []int) Games {
+func GetGamesByIds(ids []string) Games {
 	url := "https://api.igdb.com/v4/games"
 
 	idsString := ""
@@ -55,7 +55,7 @@ func GetGamesByIds(ids []int) Games {
 		if i != 0 {
 			idsString += ","
 		}
-		idsString += fmt.Sprintf("%d", id)
+		idsString += fmt.Sprintf("%s", id)
 	}
 
 	bodyString := fmt.Sprintf(`

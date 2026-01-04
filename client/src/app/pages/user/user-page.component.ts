@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../interfaces/user';
 import { HttpHandler } from '../../services/http-handler.service';
@@ -8,12 +8,15 @@ import { UserInfo } from '../../components/user-info/user-info.component';
 @Component({
     selector: 'user-page',
     templateUrl: 'user-page.component.html',
-    styleUrl: 'user-page.component.scss',
+    styleUrls: ['user-page.component.scss'],
     imports: [UserGame, UserInfo],
 })
 export class UserPage implements OnInit {
     userId!: string;
     user!: User;
+    loading = true;
+    loadingState = computed(() => this.loading);
+
     constructor(
         private routes: ActivatedRoute,
         private httpHandler: HttpHandler

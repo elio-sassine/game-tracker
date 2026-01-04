@@ -1,11 +1,11 @@
 export interface Game {
-    id: number;
+    id: string;
     name: string;
     aggregated_rating: number;
     cover: Cover;
 }
 
 export interface Cover {
-    id: number;
+    id: string;
     url: string;
 }

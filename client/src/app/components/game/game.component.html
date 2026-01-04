@@ -1,7 +1,7 @@
 <mat-card appearance="raised" class="game">
-    @if (game()?.cover && game()?.cover != undefined && game()?.cover?.url !=
+    @if (game()?.cover && game()?.cover !== undefined && game()?.cover?.url !==
     undefined) {
-    <img mat-card-avatar [src]="game()?.cover?.url" />
+    <img mat-card-avatar [src]="game()?.cover?.url" [alt]="game()?.name" />
     }
     <mat-card-title>{{ game()?.name }}</mat-card-title>
     <mat-card-content>

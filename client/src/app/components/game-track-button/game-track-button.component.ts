@@ -18,7 +18,8 @@ export class GameTrackButtonComponent {
     track() {
         const id = this.game?.id ?? null;
         if (!id) return;
-        this.http.postTrackRequest(Number(id)).subscribe({
+        const idString = id.toString();
+        this.http.postTrackRequest(idString).subscribe({
             next: () => {},
             error: () => {},
         });
@@ -27,7 +28,8 @@ export class GameTrackButtonComponent {
     untrack() {
         const id = this.game?.id ?? null;
         if (!id) return;
-        this.http.postUntrackRequest(Number(id)).subscribe({
+        const idString = id.toString();
+        this.http.postUntrackRequest(idString).subscribe({
             next: () => {},
             error: () => {},
         });

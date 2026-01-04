@@ -17,7 +17,7 @@ export class GameHandler {
             return;
         }
 
-        this.http.getGamesRequest(name).subscribe((res) => {
+        this.http.getSearchGamesRequest(name).subscribe((res) => {
             this.games = res;
         });
     }

@@ -93,7 +93,7 @@ func getUserWithFilter(filter bson.D, result *User) (*User, error) {
 			return nil, err
 		}
 
-		log.Panic(err)
+		log.Panic(err, "\nfilter: ", filter, "\nresult: ", result)
 	}
 
 	println("documents found")

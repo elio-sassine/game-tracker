@@ -14,11 +14,11 @@ func SetupGameTrackingHandlers(router *gin.Engine) {
 	trackingGroup := router.Group("/gameTracking")
 
 	trackingGroup.Use(middleware.AuthRequired())
-	{
-		trackingGroup.POST("/track", trackGameHandler)
-		trackingGroup.POST("/untrack", untrackGameHandler)
-		trackingGroup.GET("/games", getTrackedGamesHandler)
-	}
+
+	trackingGroup.POST("/track", trackGameHandler)
+	trackingGroup.POST("/untrack", untrackGameHandler)
+
+	router.GET("/getTrackedGames", getTrackedGamesHandler)
 }
 
 func trackGameHandler(c *gin.Context) {
@@ -44,14 +44,14 @@ func trackGameHandler(c *gin.Context) {
 		return
 	}
 
-	gameId, err := strconv.ParseInt(request.Game, 10, 32)
+	_, err := strconv.ParseInt(request.Game, 10, 32)
 	if err != nil {
 		c.AbortWithStatusJSON(400, gin.H{"error": "Failed to parse game ID: " + err.Error()})
 		log.Panic("Failed to parse game ID: ", err)
 		return
 	}
 
-	game.TrackGame(userID.(string), int(gameId))
+	game.TrackGame(userID.(string), request.Game)
 }
 
 func untrackGameHandler(c *gin.Context) {
@@ -78,24 +78,24 @@ func untrackGameHandler(c *gin.Context) {
 		return
 	}
 
-	gameId, err := strconv.ParseInt(request.Game, 10, 32)
+	_, err := strconv.ParseInt(request.Game, 10, 32)
 	if err != nil {
 		c.AbortWithStatusJSON(400, gin.H{"error": "Failed to parse game ID: " + err.Error()})
 		log.Panic("Failed to parse game ID: ", err)
 		return
 	}
 
-	game.UntrackGame(userID.(string), int(gameId))
+	game.UntrackGame(userID.(string), request.Game)
 }
 
 func getTrackedGamesHandler(c *gin.Context) {
-	userID, exists := c.Get("userID")
+	userID := c.Query("userID")
 
-	if !exists {
+	if userID == "" {
 		c.AbortWithStatus(401)
 		return
 	}
 
-	trackedGames := game.GetTrackedGames(userID.(string))
+	trackedGames := game.GetTrackedGames(userID)
 	c.IndentedJSON(200, trackedGames)
 }

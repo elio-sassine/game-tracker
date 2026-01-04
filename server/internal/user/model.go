@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	Id       snowflake.ID `json:"_id" bson:"_id"`
+	Id       snowflake.ID `json:"id" bson:"_id"`
 	Username string       `json:"username" bson:"username"`
 	Password string       `json:"password" bson:"password"`
 	Email    string       `json:"email" bson:"email"`
@@ -14,7 +14,7 @@ type User struct {
 }
 
 type UserRequest struct {
-	Id       snowflake.ID `json:"_id" bson:"_id"`
+	Id       snowflake.ID `json:"id" bson:"_id"`
 	Username string       `json:"username" bson:"username"`
 	Games    []string     `json:"games" bson:"games"`
 }

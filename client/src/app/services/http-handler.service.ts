@@ -13,7 +13,7 @@ export class HttpHandler {
     baseUrl = 'https://localhost:8443';
     jwtKey = null;
 
-    getGamesRequest(name: string): Observable<Game[]> {
+    getSearchGamesRequest(name: string): Observable<Game[]> {
         return this.http.get<Game[]>(`${this.baseUrl}/search?name=${name}`);
     }
 
@@ -51,18 +51,27 @@ export class HttpHandler {
         });
     }
 
-    postTrackRequest(gameId: number): Observable<unknown> {
+    getTrackedGamesRequest(id: string): Observable<Game[]> {
+        return this.http.get<Game[]>(
+            `${this.baseUrl}/getTrackedGames?userID=${id}`,
+            {
+                withCredentials: true,
+            }
+        );
+    }
+
+    postTrackRequest(gameId: string): Observable<unknown> {
         return this.http.post(
             `${this.baseUrl}/gameTracking/track`,
-            { game: gameId.toString() },
+            { game: gameId },
             { withCredentials: true }
         );
     }
 
-    postUntrackRequest(gameId: number): Observable<unknown> {
+    postUntrackRequest(gameId: string): Observable<unknown> {
         return this.http.post(
             `${this.baseUrl}/gameTracking/untrack`,
-            { game: gameId.toString() },
+            { game: gameId },
             { withCredentials: true }
         );
     }
