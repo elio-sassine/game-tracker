@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
     FormControl,
     FormGroup,
@@ -9,13 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RegistrationHandler } from '../../services/registeration-handler.service';
-import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'register-component',
+    selector: 'app-register-component',
     templateUrl: 'register.component.html',
     styleUrl: 'register.component.scss',
     imports: [
@@ -25,7 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
         MatButtonModule,
     ],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
     constructor(
         private registrationHandler: RegistrationHandler,
         private snackBar: MatSnackBar
@@ -40,8 +37,6 @@ export class RegisterComponent implements OnInit {
         ]),
     });
 
-    ngOnInit(): void {}
-
     get email() {
         return this.registerForm.get('email');
     }
@@ -51,13 +46,12 @@ export class RegisterComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log('submitted!');
         if (
             this.registerForm.value.email &&
             this.registerForm.value.password &&
             this.registerForm.value.username
         ) {
-            const result = this.registrationHandler.makeUser(
+            this.registrationHandler.makeUser(
                 this.registerForm.value.email,
                 this.registerForm.value.password,
                 this.registerForm.value.username

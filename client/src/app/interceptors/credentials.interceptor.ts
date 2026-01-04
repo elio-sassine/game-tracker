@@ -10,9 +10,9 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CredentialsInterceptor implements HttpInterceptor {
     intercept(
-        req: HttpRequest<any>,
+        req: HttpRequest<unknown>,
         next: HttpHandler
-    ): Observable<HttpEvent<any>> {
+    ): Observable<HttpEvent<unknown>> {
         const cloned = req.clone({ withCredentials: true });
         return next.handle(cloned);
     }

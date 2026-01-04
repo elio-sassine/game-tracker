@@ -1,5 +1,5 @@
 <mat-card appearance="raised" class="game">
-    @if (game()?.cover && game()?.cover !== undefined && game()?.cover?.url !==
+    @if (game()?.cover && game()?.cover != undefined && game()?.cover?.url !=
     undefined) {
     <img mat-card-avatar [src]="game()?.cover?.url" [alt]="game()?.name" />
     }
@@ -8,6 +8,6 @@
         Rating: {{ game()?.aggregated_rating?.toFixed(0) }}
     </mat-card-content>
     <mat-card-actions>
-        <game-track-button [game]="game()"></game-track-button>
+        <app-game-track-button [game]="game()"></app-game-track-button>
     </mat-card-actions>
 </mat-card>

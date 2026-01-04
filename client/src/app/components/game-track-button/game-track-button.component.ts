@@ -4,7 +4,7 @@ import { Game } from '../../interfaces/game';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'game-track-button',
+    selector: 'app-game-track-button',
     standalone: true,
     imports: [MatButtonModule],
     templateUrl: './game-track-button.component.html',
@@ -20,8 +20,12 @@ export class GameTrackButtonComponent {
         if (!id) return;
         const idString = id.toString();
         this.http.postTrackRequest(idString).subscribe({
-            next: () => {},
-            error: () => {},
+            next: () => {
+                return;
+            },
+            error: () => {
+                return;
+            },
         });
     }
 
@@ -30,8 +34,12 @@ export class GameTrackButtonComponent {
         if (!id) return;
         const idString = id.toString();
         this.http.postUntrackRequest(idString).subscribe({
-            next: () => {},
-            error: () => {},
+            next: () => {
+                return;
+            },
+            error: () => {
+                return;
+            },
         });
     }
 }

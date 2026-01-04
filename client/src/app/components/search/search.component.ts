@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'search',
+    selector: 'app-search',
     templateUrl: './search.component.html',
     styleUrl: './search.component.scss',
     imports: [
@@ -21,7 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatButtonModule,
     ],
 })
-export class Search {
+export class SearchComponent {
     constructor(private gameHandler: GameHandler) {}
 
     nameForm = new FormGroup({

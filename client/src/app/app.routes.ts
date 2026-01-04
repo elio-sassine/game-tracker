@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import { SearchPage } from './pages/search/search-page.component';
-import { RegisterPage } from './pages/register/register-page.component';
-import { LoginPage } from './pages/login/login-page.component';
-import { UserPage } from './pages/user/user-page.component';
+import { SearchPageComponent } from './pages/search/search-page.component';
+import { RegisterPageComponent } from './pages/register/register-page.component';
+import { LoginPageComponent } from './pages/login/login-page.component';
+import { UserPageComponent } from './pages/user/user-page.component';
 
 export const routes: Routes = [
     {
@@ -12,18 +12,18 @@ export const routes: Routes = [
     },
     {
         path: 'search',
-        component: SearchPage,
+        component: SearchPageComponent,
     },
     {
         path: 'register',
-        component: RegisterPage,
+        component: RegisterPageComponent,
     },
     {
         path: 'login',
-        component: LoginPage,
+        component: LoginPageComponent,
     },
     {
         path: 'user/:id',
-        component: UserPage,
+        component: UserPageComponent,
     },
 ];

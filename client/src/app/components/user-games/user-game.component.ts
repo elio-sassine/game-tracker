@@ -6,12 +6,12 @@ import { GameComponent } from '../game/game.component';
 import { effect, signal } from '@angular/core';
 
 @Component({
-    selector: 'user-game',
+    selector: 'app-user-game',
     templateUrl: 'user-game.component.html',
     styleUrl: 'user-game.component.scss',
     imports: [GameComponent],
 })
-export class UserGame {
+export class UserGameComponent {
     userInput = input<User>();
 
     user = computed(() => this.userInput());
@@ -24,14 +24,12 @@ export class UserGame {
     // fetch when user changes
     private fetch = effect(() => {
         const u = this.user();
-        console.log('User changed:', u);
         if (!u) {
             this.trackedGames.set([]);
             return;
         }
         this.gameTrackingService.getUserTrackedGames(u).subscribe({
             next: (res) => {
-                console.log('Fetched tracked games:', res);
                 this.trackedGames.set(res);
             },
             error: () => this.trackedGames.set([]),

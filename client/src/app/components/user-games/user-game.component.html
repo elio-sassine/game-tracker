@@ -2,7 +2,7 @@
     @if (user() !== null && (trackedGames().length) > 0) {
     <h2>Your Games</h2>
     @for (game of trackedGames(); track game.id) {
-    <game [gameInput]="game" />
+    <app-game [gameInput]="game" />
     } } @else {
     <p>You have no games tracked!</p>
     }

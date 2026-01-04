@@ -11,7 +11,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { LoginHandler } from '../../services/login-handler.service';
 
 @Component({
-    selector: 'login-component',
+    selector: 'app-login-component',
     templateUrl: 'login.component.html',
     styleUrl: 'login.component.scss',
     imports: [
@@ -42,7 +42,7 @@ export class LoginComponent {
 
     onSubmit() {
         if (this.loginForm.value.email && this.loginForm.value.password) {
-            const result = this.loginHandler.loginUser(
+            this.loginHandler.loginUser(
                 this.loginForm.value.email,
                 this.loginForm.value.password
             );

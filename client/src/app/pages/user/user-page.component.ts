@@ -2,16 +2,16 @@ import { Component, OnInit, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../interfaces/user';
 import { HttpHandler } from '../../services/http-handler.service';
-import { UserGame } from '../../components/user-games/user-game.component';
-import { UserInfo } from '../../components/user-info/user-info.component';
+import { UserGameComponent } from '../../components/user-games/user-game.component';
+import { UserInfoComponent } from '../../components/user-info/user-info.component';
 
 @Component({
-    selector: 'user-page',
+    selector: 'app-user-page',
     templateUrl: 'user-page.component.html',
     styleUrls: ['user-page.component.scss'],
-    imports: [UserGame, UserInfo],
+    imports: [UserGameComponent, UserInfoComponent],
 })
-export class UserPage implements OnInit {
+export class UserPageComponent implements OnInit {
     userId!: string;
     user!: User;
     loading = true;

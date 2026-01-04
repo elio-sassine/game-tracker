@@ -1,9 +1,9 @@
 <div>
-    <search class="search"></search>
+    <app-search class="search"></app-search>
     @if (this.gameHandler.games.length > 0) {
     <div class="games">
         @for (game of this.gameHandler.games; track game.id) {
-        <game [gameInput]="game"></game>
+        <app-game [gameInput]="game"></app-game>
         }
     </div>
     }
